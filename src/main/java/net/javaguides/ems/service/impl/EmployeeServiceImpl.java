@@ -11,6 +11,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+// (3-tier MVC layer)
+
+// @Controller
+// @RestController
+
+
+// @Repository
+
+
+
 @Service
 @AllArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
