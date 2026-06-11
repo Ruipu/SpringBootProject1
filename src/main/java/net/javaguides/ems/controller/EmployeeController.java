@@ -1,5 +1,6 @@
 package net.javaguides.ems.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import net.javaguides.ems.dto.EmployeeDto;
 import net.javaguides.ems.service.EmployeeService;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/employees") // + URL on method
+@RequestMapping("/api/v1/employees") // + URL on method
 
 //@Scope("singleton") -> default scope
 //@Scope("prototype")
@@ -71,7 +72,8 @@ public class EmployeeController {
 
     //Build Add Employee REST API
     @PostMapping
-    public ResponseEntity<EmployeeDto> createEmployee(@RequestBody EmployeeDto employeeDto) {
+    public ResponseEntity<EmployeeDto> createEmployee(@Valid
+                                                      @RequestBody EmployeeDto employeeDto) {
         EmployeeDto savedEmployee = employeeService.createEmployee(employeeDto);
         return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
 
@@ -81,6 +83,13 @@ public class EmployeeController {
     public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable("id") Long employeeId) {
         EmployeeDto employeeDto = employeeService.getEmployeeById(employeeId);
         return ResponseEntity.ok(employeeDto);
+    }
+    //Build Search Employee REST API
+    @GetMapping("/search")
+    public ResponseEntity<String> searchEmployee(
+            @RequestParam String name) {
+        return ResponseEntity.ok(
+                "Searching employee: " + name);
     }
     //Build Get All Employee REST API
     @GetMapping

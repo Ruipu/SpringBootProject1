@@ -1,9 +1,12 @@
+/*
 package net.javaguides.ems.service;
 
 import net.javaguides.ems.dto.EmployeeDto;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
+// @Qualifier("employeeServiceImplSecondary") // option2
 public class EmployeeServiceImpl1 implements EmployeeService {
 
     @Override
@@ -31,3 +34,4 @@ public class EmployeeServiceImpl1 implements EmployeeService {
 
     }
 }
+*/
