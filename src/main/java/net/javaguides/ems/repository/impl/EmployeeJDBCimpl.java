@@ -1,93 +1,68 @@
 package net.javaguides.ems.repository.impl;
 
+import lombok.RequiredArgsConstructor;
 import net.javaguides.ems.entity.Employee;
-import net.javaguides.ems.repository.EmployeeJDBC;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
-public class EmployeeJDBCimpl implements EmployeeJDBC {
+@Repository
+@RequiredArgsConstructor
+public class EmployeeJDBCimpl {
+
     private final JdbcTemplate jdbcTemplate;
 
-    public EmployeeJDBCimpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+    private static final RowMapper<Employee> ROW_MAPPER = (rs, rowNum) -> new Employee(
+            rs.getLong("id"),
+            rs.getString("first_name"),
+            rs.getString("last_name"),
+            rs.getString("email_id")
+    );
 
-    // ─── RowMapper ───────────────────────────────────────────────────────────────
-    private static class EmployeeRowMapper implements RowMapper<Employee> {
-        @Override
-        public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Employee employee = new Employee();
-            employee.setId(rs.getLong("id"));
-            employee.setFirstName(rs.getString("first_name"));
-            employee.setLastName(rs.getString("last_name"));
-            employee.setEmail(rs.getString("email"));
-            return employee;
-        }
-    }
-
-    // ─── CREATE ──────────────────────────────────────────────────────────────────
-    @Override
     public Employee save(Employee employee) {
-        String sql = "INSERT INTO employees (first_name, last_name, email) VALUES (?, ?, ?)";
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, employee.getFirstName());
-            ps.setString(2, employee.getLastName());
-            ps.setString(3, employee.getEmail());
-            return ps;
-        }, keyHolder);
-
-        employee.setId(keyHolder.getKey().longValue());
+        if (employee.getId() == null) {
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            jdbcTemplate.update(con -> {
+                PreparedStatement ps = con.prepareStatement(
+                        "INSERT INTO employees (first_name, last_name, email_id) VALUES (?, ?, ?)",
+                        Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, employee.getFirstName());
+                ps.setString(2, employee.getLastName());
+                ps.setString(3, employee.getEmail());
+                return ps;
+            }, keyHolder);
+            employee.setId(keyHolder.getKey().longValue());
+        } else {
+            jdbcTemplate.update(
+                    "UPDATE employees SET first_name = ?, last_name = ?, email_id = ? WHERE id = ?",
+                    employee.getFirstName(), employee.getLastName(), employee.getEmail(), employee.getId());
+        }
         return employee;
     }
 
-    // ─── READ ONE ────────────────────────────────────────────────────────────────
-    @Override
     public Optional<Employee> findById(Long id) {
-        String sql = "SELECT * FROM employees WHERE id = ?";
-
-        List<Employee> results = jdbcTemplate.query(sql, new EmployeeRowMapper(), id);
-        return results.stream().findFirst();
+        List<Employee> results = jdbcTemplate.query(
+                "SELECT * FROM employees WHERE id = ?", ROW_MAPPER, id);
+        return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
     }
 
-    // ─── READ ALL ────────────────────────────────────────────────────────────────
-    @Override
     public List<Employee> findAll() {
-        String sql = "SELECT * FROM employees";
-        return jdbcTemplate.query(sql, new EmployeeRowMapper());
+        return jdbcTemplate.query("SELECT * FROM employees", ROW_MAPPER);
     }
 
-    // ─── UPDATE ──────────────────────────────────────────────────────────────────
-    @Override
-    public Employee update(Employee employee) {
-        String sql = "UPDATE employees SET first_name = ?, last_name = ?, email = ? WHERE id = ?";
-
-        jdbcTemplate.update(sql,
-                employee.getFirstName(),
-                employee.getLastName(),
-                employee.getEmail(),
-                employee.getId()
-        );
-
-        return employee;
-    }
-
-    // ─── DELETE ──────────────────────────────────────────────────────────────────
-    @Override
     public void deleteById(Long id) {
-        String sql = "DELETE FROM employees WHERE id = ?";
-        jdbcTemplate.update(sql, id);
+        jdbcTemplate.update("DELETE FROM employees WHERE id = ?", id);
+    }
+
+    public long count() {
+        Long count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM employees", Long.class);
+        return count != null ? count : 0L;
     }
 }
