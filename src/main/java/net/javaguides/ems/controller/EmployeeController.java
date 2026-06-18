@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@AllArgsConstructor
-@RestController
-@RequestMapping("/api/v1/employees") // + URL on method
+//@AllArgsConstructor
+//@RestController
+//@RequestMapping("/api/v1/employees") // + URL on method
 
 //@Scope("singleton") -> default scope
 //@Scope("prototype")
@@ -76,7 +76,6 @@ public class EmployeeController {
                                                       @RequestBody EmployeeDto employeeDto) {
         EmployeeDto savedEmployee = employeeService.createEmployee(employeeDto);
         return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
-
     }
     //Build Get Employee REST API
     @GetMapping("/{id}") // /api/employees/{id}"
