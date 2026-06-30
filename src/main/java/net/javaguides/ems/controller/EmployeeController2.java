@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.javaguides.ems.dto.EmployeeDto;
 import net.javaguides.ems.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,11 +20,8 @@ import java.util.List;
 @RequestMapping("/api/v1/employees")// + URL on method
 @Tag(name = "Employee API", description = "Employee Management REST APIs")
 public class EmployeeController2 {
-    private EmployeeService employeeService;
-    public void setEmployeeService(EmployeeService employeeService) {
-        this.employeeService = employeeService;
-    }
-
+    private final EmployeeService employeeService;
+    
     //Build Add Employee REST API
     @Operation(summary = "Create a new employee")
     @PostMapping
@@ -35,22 +33,21 @@ public class EmployeeController2 {
         EmployeeDto savedEmployee = employeeService.createEmployee(employeeDto);
         return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
     }
-
     //Build Get Employee REST API
     @Operation(summary = "Get employee by ID")
     @GetMapping("/{id}") // /api/v1/employees/{id}"
-    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable Long employeeId,
+    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable Long id,
                                                        @RequestHeader(value = "User-Agent", required = false)
                                                         String userAgent) {
         log.info("Request from: {}", userAgent);
-        log.info("Fetching employee with id: {}", employeeId);
-        EmployeeDto employeeDto = employeeService.getEmployeeById(employeeId);
+        log.info("Fetching employee with id: {}", id);
+        EmployeeDto employeeDto = employeeService.getEmployeeById(id);
         return ResponseEntity.ok(employeeDto);
     }
-
+/*
     //Build Search Employee REST API
     @Operation(summary = "Search employee by name")
-    @GetMapping("/search")
+    @GetMapping
     public ResponseEntity<String> searchEmployee(
             @RequestParam String name,@RequestHeader(value = "User-Agent", required = false) String userAgent) {
         log.info("Request of searching from: {}", userAgent);
@@ -58,7 +55,7 @@ public class EmployeeController2 {
         return ResponseEntity.ok(
                 "Searching employee: " + name);
     }
-
+*/
     //Build Get All Employee REST API
     @Operation(summary = "Get all employees")
     @GetMapping

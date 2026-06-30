@@ -1,4 +1,4 @@
-/*
+
 package net.javaguides.ems.repository;
 
 import net.javaguides.ems.entity.Employee;
@@ -13,4 +13,4 @@ public interface EmployeeJDBC {
     Employee update(Employee employee);
     void deleteById(Long id);
 }
-*/
+

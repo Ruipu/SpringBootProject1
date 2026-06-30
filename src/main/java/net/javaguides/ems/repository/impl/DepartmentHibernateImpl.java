@@ -1,5 +1,6 @@
 package net.javaguides.ems.repository.impl;
 
+import jakarta.persistence.EntityManagerFactory;
 import net.javaguides.ems.entity.Department;
 import net.javaguides.ems.entity.Employee;
 import net.javaguides.ems.repository.DepartmentHibernate;
@@ -17,8 +18,9 @@ import java.util.Set;
 @Transactional
 public class DepartmentHibernateImpl implements DepartmentHibernate {
     private final SessionFactory sessionFactory;
-    public DepartmentHibernateImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+
+    public DepartmentHibernateImpl(EntityManagerFactory emf) {
+        this.sessionFactory = emf.unwrap(SessionFactory.class);
     }
     private Session getSession() {
         return sessionFactory.getCurrentSession();

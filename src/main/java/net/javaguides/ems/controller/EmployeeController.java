@@ -119,11 +119,53 @@ public class EmployeeController {
 //public class YoutubeVideoNonPremiumController { // videoService(enable) -> play ads in 60s
 //    Service1 s1
 //
+//    //Build Update Employee REST API
+//    @PutMapping("/{id}")
+//    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable("id") Long employeeId,
+//                                                      @RequestBody EmployeeDto updatedEmployeeDto) {
+//        EmployeeDto employeeDto = employeeService.updateEmployee(employeeId, updatedEmployeeDto);
+//        return ResponseEntity.ok(employeeDto);
+//    }
 //
+//    //Build Delete Employee REST API
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<String> deleteEmployee(@PathVariable("id") Long employeeId) {
+//        employeeService.deleteEmployee(employeeId);
+//        return ResponseEntity.ok("Employee deleted successfully");
+//    }
 //}
-
-// YoutubeVideoPremiumController // videoService(enable) -> play ads in 3s and then enabl skip button
-
-
-
-
+//
+//
+//// ioc -> DI -> spring bean -> scopes(singleton), prototype, request, session, application, webscoket
+//// controller1 // service 1(connection timeout -> 1s to 3s), 2, 3, 4, 5 ->
+////public class YoutubeVideoNonPremiumController { // videoService(enable) -> play ads in 60s
+////    Service1 s1
+////
+////
+////}
+//// YoutubeVideoPremiumController // videoService(enable) -> play ads in 3s and then enabl skip button
+////@Scope("singleton") -> default scope
+////@Scope("prototype")
+//////@Scope("requestScope")
+//////@Scope("SessionScope")
+//////@Scope("application")
+//////@Scope("websocket")
+//
+//
+//// different classs
+//// @RequestMapping("/api/salary")
+//// @RequestMapping("/api/profile")
+////@RequestMapping("/api/manager")
+//
+//// A 0% youtube users -> 3s
+//// B 100% youtube users  -> 10s -> 20s -> 30s
+////     -> 100 million users ??? watch 10s ?%, watch 5S ?%, watch 3S ?%
+////     -> mouser hovering on ads?
+////     -> click the ads
+//
+//// old clients() ->
+//// @RequestMapping("v1/api/employees") -> version1 -> 2010 ->  10 years
+//
+//// new clients
+//// @RequestMapping("v2/api/employees")
+//
