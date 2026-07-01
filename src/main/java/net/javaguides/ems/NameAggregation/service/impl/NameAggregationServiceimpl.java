@@ -1,10 +1,9 @@
-package net.javaguides.ems.service.impl;
+package net.javaguides.ems.NameAggregation.service.impl;
 
+import net.javaguides.ems.NameAggregation.service.NameAggregationService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
-import net.javaguides.ems.exception.DownStreamServiceException;
-import net.javaguides.ems.service.NameAggregationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
@@ -37,15 +36,7 @@ public class NameAggregationServiceimpl implements NameAggregationService {
         factory.setReadTimeout(3000);
         RestTemplate restTemplate = new RestTemplate(factory);
         Map<String, List<String>> requestBody = Map.of("name", updatedNames);
-        Map response;
-        try {
-            response = restTemplate.postForObject(downstreamUrl, requestBody, Map.class);
-        } catch (Exception e) {
-            throw new DownStreamServiceException("Failed to call downstream service: " + downstreamUrl, e);
-        }
-        if (response == null || response.get("name") == null) {
-            throw new DownStreamServiceException("Downstream service returned empty response");
-        }
+        Map response = restTemplate.postForObject(downstreamUrl, requestBody, Map.class);
         return (List<String>) response.get("name");
     }
     public List<String> aggregateFallback(List<String> incomingNames, Throwable t) {

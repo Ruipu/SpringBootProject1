@@ -1,4 +1,4 @@
-package net.javaguides.ems.config;
+package net.javaguides.ems.NameAggregation.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

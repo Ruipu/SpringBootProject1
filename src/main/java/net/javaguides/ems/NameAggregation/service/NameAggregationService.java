@@ -1,4 +1,4 @@
-package net.javaguides.ems.service;
+package net.javaguides.ems.NameAggregation.service;
 
 import java.util.List;
 
