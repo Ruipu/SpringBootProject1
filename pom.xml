@@ -110,7 +110,7 @@
 				<version>0.8.12</version>
 				<configuration>
 					<excludes>
-							<exclude>net/javaguides/ems/repository/impl/**</exclude>
+							<exclude>net/javaguides/ems/repository/**</exclude>
 							<exclude>net/javaguides/ems/EmsBackApplication.class</exclude>
 					</excludes>
 				</configuration>
