@@ -32,7 +32,7 @@
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.projectKey>SpringBootProject1</sonar.projectKey>
 		<sonar.coverage.exclusions>
-			net/javaguides/ems/repository/impl/**,
+			net/javaguides/ems/repository/**,
 			net/javaguides/ems/EmsBackApplication.java
 		</sonar.coverage.exclusions>
 	</properties>
