@@ -1,7 +1,6 @@
-package net.javaguides.ems.NameAggregationController;
+package net.javaguides.ems.NameAggregation.controller;
 
 
-import net.javaguides.ems.NameAggregation.controller.NameAggregationController;
 import net.javaguides.ems.NameAggregation.service.NameAggregationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

@@ -33,9 +33,7 @@
 		<sonar.projectKey>SpringBootProject1</sonar.projectKey>
 		<sonar.coverage.exclusions>
 			net/javaguides/ems/repository/impl/**,
-			net/javaguides/ems/EmsBackApplication.java,
-			net/javaguides/ems/entity/**,
-			net/javaguides/ems/NameAggregation/service/impl/**
+			net/javaguides/ems/EmsBackApplication.java
 		</sonar.coverage.exclusions>
 	</properties>
 	<dependencies>

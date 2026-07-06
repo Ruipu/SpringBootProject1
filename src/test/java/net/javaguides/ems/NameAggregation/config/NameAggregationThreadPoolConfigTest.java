@@ -1,7 +1,6 @@
-package net.javaguides.ems.NameAggregationConfig;
+package net.javaguides.ems.NameAggregation.config;
 
 
-import net.javaguides.ems.NameAggregation.config.ThreadPoolConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
