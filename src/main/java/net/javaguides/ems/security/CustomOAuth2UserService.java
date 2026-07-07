@@ -16,15 +16,19 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
+        return buildOAuth2User(oAuth2User);
+    }
 
-        String email = oAuth2User.getAttribute("email");
-
-        String role = "ROLE_USER";
-
+    OAuth2User buildOAuth2User(OAuth2User oAuth2User) {
+        String role = determineRole(oAuth2User);
         return new DefaultOAuth2User(
                 List.of(new SimpleGrantedAuthority(role)),
                 oAuth2User.getAttributes(),
                 "email"
         );
+    }
+
+    String determineRole(OAuth2User oAuth2User) {
+        return "ROLE_USER";
     }
 }
