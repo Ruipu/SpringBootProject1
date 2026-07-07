@@ -1,6 +1,7 @@
 package net.javaguides.ems.NameAggregation.service;
 
 
+import com.sun.net.httpserver.HttpServer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,9 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -69,5 +73,37 @@ class NameAggregationServiceimplTest {
         assertEquals("Jessica", result.get(0));
         assertEquals("April", result.get(3));
         assertEquals("Simon (fallback - downstream unavailable)", result.get(4));
+    }
+    @Test
+    @DisplayName("aggregate - should call downstream service and return names from response")
+    void aggregate_Success() throws IOException {
+        HttpServer server = HttpServer.create(new InetSocketAddress(0), 0);
+        int port = server.getAddress().getPort();
+
+        server.createContext("/v1/name/aggregation", exchange -> {
+            String responseBody = "{\"name\":[\"Jessica\",\"Jocelyn\",\"Simon\"]}";
+            exchange.getResponseHeaders().set("Content-Type", "application/json");
+            exchange.sendResponseHeaders(200, responseBody.getBytes().length);
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(responseBody.getBytes());
+            }
+        });
+        server.start();
+
+        try {
+            ReflectionTestUtils.setField(nameAggregationService, "myName", "Simon");
+            ReflectionTestUtils.setField(nameAggregationService, "downstreamUrl",
+                    "http://localhost:" + port + "/v1/name/aggregation");
+
+            List<String> incomingNames = Arrays.asList("Jessica", "Jocelyn");
+
+            List<String> result = nameAggregationService.aggregate(incomingNames);
+
+            assertNotNull(result);
+            assertEquals(3, result.size());
+            assertTrue(result.contains("Simon"));
+        } finally {
+            server.stop(0);
+        }
     }
 }
