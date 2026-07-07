@@ -58,21 +58,23 @@ pipeline {
         stage('Deploy to EC2') {
             steps {
                 sshagent(credentials: ['ec2-ssh-key']) {
-                    withCredentials([string(
-                        credentialsId: 'google-client-secret',
-                        variable: 'GOOGLE_CLIENT_SECRET'
-                    )]) {
+                    withCredentials([
+                        string(credentialsId: 'google-client-secret', variable: 'GOOGLE_CLIENT_SECRET'),
+                        string(credentialsId: 'db-password', variable: 'DB_PASSWORD')
+                    ]) {
                         sh """
                             ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} '
                                 sudo docker pull ${DOCKER_IMAGE}:latest &&
                                 sudo docker stop ems-back || true &&
                                 sudo docker rm ems-back || true &&
-                                sudo docker run -d --name ems-back --network host -e GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET} ${DOCKER_IMAGE}:latest
+                                sudo docker run -d --name ems-back --network host \
+                                  -e GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET} \
+                                  -e DB_PASSWORD=${DB_PASSWORD} \
+                                  -e SPRING_PROFILES_ACTIVE=prod \
+                                  ${DOCKER_IMAGE}:latest
                             '
                         """
                     }
                 }
             }
         }
-    }
-}
