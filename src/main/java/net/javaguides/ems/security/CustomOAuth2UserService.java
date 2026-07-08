@@ -9,9 +9,13 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+    private static final Set<String> ADMIN_EMAILS = Set.of(
+            "rgao4@tulane.edu"
+    );
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -29,6 +33,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     String determineRole(OAuth2User oAuth2User) {
+        String email = oAuth2User.getAttribute("email");
+        if (email != null && ADMIN_EMAILS.contains(email)) {
+            return "ROLE_ADMIN";
+        }
         return "ROLE_USER";
     }
 }

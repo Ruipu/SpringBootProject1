@@ -92,4 +92,5 @@ public class EmployeeController2 {
         log.info("Employee deleted successfully. id={}", employeeId);
         return ResponseEntity.ok("Employee deleted successfully");
     }
+
 }

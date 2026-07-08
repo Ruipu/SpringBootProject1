@@ -1,5 +1,7 @@
 package net.javaguides.ems.service.impl;
 
+import net.javaguides.ems.kafka.event.EmployeeEvent;
+import net.javaguides.ems.kafka.producer.EmployeeEventProducer;
 import net.javaguides.ems.service.NotificationService;
 import org.springframework.cache.annotation.Cacheable;
 import lombok.AllArgsConstructor;
@@ -33,11 +35,22 @@ import java.util.List;
 public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository employeeRepository;
     private NotificationService notificationService;
+    private EmployeeEventProducer employeeEventProducer;
+
     @Override
     public EmployeeDto createEmployee(EmployeeDto employeeDto) {
         log.info("Creating employee");
         Employee employee = EmployeeMapper.mapToEmployee(employeeDto);
         Employee savedEmployee = employeeRepository.save(employee);
+
+        employeeEventProducer.publish(new EmployeeEvent(
+                EmployeeEvent.EventType.CREATED,
+                savedEmployee.getId(),
+                savedEmployee.getFirstName(),
+                savedEmployee.getLastName(),
+                savedEmployee.getEmail()
+        ));
+
         notificationService.sendNotification();
         log.info("Employee created successfully");
         return EmployeeMapper.mapToEmployeeDto(savedEmployee);
@@ -76,6 +89,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setLastName(updatedEmployeeDto.getLastName());
         employee.setEmail(updatedEmployeeDto.getEmail());
         Employee updatedEmployeeObj = employeeRepository.save(employee);
+
+        employeeEventProducer.publish(new EmployeeEvent(
+                EmployeeEvent.EventType.UPDATED,
+                updatedEmployeeObj.getId(),
+                updatedEmployeeObj.getFirstName(),
+                updatedEmployeeObj.getLastName(),
+                updatedEmployeeObj.getEmail()
+        ));
+
         log.info("Employee updated successfully");
         return EmployeeMapper.mapToEmployeeDto(updatedEmployeeObj);
     }
@@ -87,6 +109,15 @@ public class EmployeeServiceImpl implements EmployeeService {
                 ()-> new ResourceNotFoundException("Employee not found with id: " + employeeId)
         );
         employeeRepository.deleteById(employeeId);
+
+        employeeEventProducer.publish(new EmployeeEvent(
+                EmployeeEvent.EventType.DELETED,
+                employee.getId(),
+                employee.getFirstName(),
+                employee.getLastName(),
+                employee.getEmail()
+        ));
+
         log.info("Employee deleted successfully");
     }
 }
