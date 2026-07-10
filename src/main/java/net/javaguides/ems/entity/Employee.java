@@ -24,6 +24,8 @@ public class Employee {
     private String lastName;
     @Column(name = "email_id", nullable = false, unique = true)
     private String email;
+    @Column(name = "department")
+    private String department;
 
     @ManyToMany(
             fetch = FetchType.LAZY,
@@ -52,11 +54,12 @@ public class Employee {
     // ─── Constructors ─────────────────────────────────────
     public Employee() {}
 
-    public Employee(Long id, String firstName, String lastName, String email) {
+    public Employee(Long id, String firstName, String lastName, String email, String department) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.id = id;
+        this.department = department;
     }
 
     // ─── Getters & Setters ────────────────────────────────
@@ -76,4 +79,10 @@ public class Employee {
     public void setDepartments(Set<Department> departments) {
         this.departments = departments;
     }
+
+
+
+    public String getDepartment() { return department; }
+    public void setDepartment(String department) { this.department = department; }
 }
+

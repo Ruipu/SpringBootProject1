@@ -14,7 +14,7 @@ public class NameAggregationController {
 
     private final NameAggregationService nameAggregationService;
 
-    @PostMapping("/name/aggregation")
+    @PostMapping("v1/name/aggregation")
     public ResponseEntity<?> aggregate(@RequestBody Map<String, List<String>> request) {
         List<String> names = request.get("name");
         List<String> result = nameAggregationService.aggregate(names);

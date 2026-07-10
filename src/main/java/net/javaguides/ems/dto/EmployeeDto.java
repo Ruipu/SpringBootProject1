@@ -26,4 +26,8 @@ public class EmployeeDto {
     @NotBlank(message = "Email is required")
     @Email(message = "Email must be a valid email address")
     private String email;
+
+    @NotBlank(message = "Department is required")
+    @Size(min = 2, max = 100, message = "Department must be between 2 and 100 characters")
+    private String department;
 }

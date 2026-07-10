@@ -1,4 +1,4 @@
-package net.javaguides.ems.NameAggregation.service.impl;
+package net.javaguides.ems.NameAggregation.service;
 
 import net.javaguides.ems.NameAggregation.service.NameAggregationService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
