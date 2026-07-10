@@ -24,7 +24,7 @@ class EmployeeTest {
     @DisplayName("all-args constructor - should set all fields")
     void allArgsConstructor() {
         Set<Department> depts = new HashSet<>();
-        Employee employee = new Employee(1L, "Simon", "Gao", "simon@test.com", depts);
+        Employee employee = new Employee(1L, "Simon", "Gao", "simon@test.com", null);
         assertEquals(1L, employee.getId());
         assertEquals("Simon", employee.getFirstName());
         assertEquals("Gao", employee.getLastName());
@@ -35,7 +35,7 @@ class EmployeeTest {
     @Test
     @DisplayName("4-arg constructor - should set basic fields")
     void fourArgConstructor() {
-        Employee employee = new Employee(1L, "Simon", "Gao", "simon@test.com");
+        Employee employee = new Employee(1L, "Simon", "Gao", "simon@test.com", null);
         assertEquals(1L, employee.getId());
         assertEquals("Simon", employee.getFirstName());
         assertEquals("Gao", employee.getLastName());
@@ -63,7 +63,7 @@ class EmployeeTest {
     @Test
     @DisplayName("addDepartment - should add department and sync employee")
     void addDepartment() {
-        Employee employee = new Employee(1L, "Simon", "Gao", "simon@test.com");
+        Employee employee = new Employee(1L, "Simon", "Gao", "simon@test.com",null);
         Department dept = new Department("Engineering");
 
         employee.addDepartment(dept);
@@ -76,7 +76,7 @@ class EmployeeTest {
     @Test
     @DisplayName("removeDepartment - should remove department and sync employee")
     void removeDepartment() {
-        Employee employee = new Employee(1L, "Simon", "Gao", "simon@test.com");
+        Employee employee = new Employee(1L, "Simon", "Gao", "simon@test.com",null);
         Department dept = new Department("Engineering");
         employee.addDepartment(dept);
 

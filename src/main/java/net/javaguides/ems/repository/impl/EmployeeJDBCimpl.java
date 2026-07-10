@@ -24,7 +24,7 @@ public class EmployeeJDBCimpl {
             rs.getLong("id"),
             rs.getString("first_name"),
             rs.getString("last_name"),
-            rs.getString("email_id")
+            rs.getString("email_id"), null
     );
 
     public Employee save(Employee employee) {

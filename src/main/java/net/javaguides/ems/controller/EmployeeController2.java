@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import net.javaguides.ems.dto.EmployeeDto;
 import net.javaguides.ems.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -25,7 +27,7 @@ public class EmployeeController2 {
     //Build Add Employee REST API
     @Operation(summary = "Create a new employee")
     @PostMapping
-    public ResponseEntity<EmployeeDto> createEmployee(@Valid
+    public ResponseEntity<EmployeeDto> createEmployee(
                                                       @RequestBody EmployeeDto employeeDto,
                                                       @RequestHeader(value = "User-Agent", required = false)
                                                       String userAgent) {
@@ -66,11 +68,21 @@ public class EmployeeController2 {
         List<EmployeeDto> employees = employeeService.getAllEmployees();
         return ResponseEntity.ok(employees);
     }
+    //Build Query Employee REST API
+    @Operation(summary = "Get paged and filtered employees")
+    @GetMapping("/query")
+    public ResponseEntity<Page<EmployeeDto>> queryEmployees(
+            @RequestParam(defaultValue = "") String query,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        Page<EmployeeDto> result = employeeService.getEmployeesPaged(query, PageRequest.of(page, size));
+        return ResponseEntity.ok(result);
+    }
 
     //Build Update Employee REST API
     @Operation(summary = "Update employee by id")
     @PutMapping("/{id}")
-    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable Long employeeId,
+    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable("id") Long employeeId,
                                                       @RequestBody EmployeeDto updatedEmployeeDto
                                                         ,@RequestHeader(value = "User-Agent", required = false)
                                                       String userAgent) {

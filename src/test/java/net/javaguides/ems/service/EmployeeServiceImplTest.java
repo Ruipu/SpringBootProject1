@@ -41,8 +41,8 @@ class EmployeeServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        sampleEmployee = new Employee(1L, "Simon", "Gao", "simon@test.com");
-        sampleDto = new EmployeeDto(1L, "Simon", "Gao", "simon@test.com");
+        sampleEmployee = new Employee(1L, "Simon", "Gao", "simon@test.com",null);
+        sampleDto = new EmployeeDto(1L, "Simon", "Gao", "simon@test.com",null);
     }
 
     // ==================== createEmployee Tests ====================
@@ -97,7 +97,7 @@ class EmployeeServiceImplTest {
     @Test
     @DisplayName("getAllEmployees - should return list of employees")
     void getAllEmployees_Success() {
-        Employee secondEmployee = new Employee(2L, "Jessica", "Li", "jessica@test.com");
+        Employee secondEmployee = new Employee(2L, "Jessica", "Li", "jessica@test.com",null);
         when(employeeRepository.findAll()).thenReturn(Arrays.asList(sampleEmployee, secondEmployee));
 
         List<EmployeeDto> result = employeeService.getAllEmployees();
@@ -126,8 +126,8 @@ class EmployeeServiceImplTest {
     @Test
     @DisplayName("updateEmployee - should update and return employee")
     void updateEmployee_Success() {
-        EmployeeDto updatedDto = new EmployeeDto(1L, "UpdatedSimon", "UpdatedGao", "updated@test.com");
-        Employee updatedEmployee = new Employee(1L, "UpdatedSimon", "UpdatedGao", "updated@test.com");
+        EmployeeDto updatedDto = new EmployeeDto(1L, "UpdatedSimon", "UpdatedGao", "updated@test.com",null);
+        Employee updatedEmployee = new Employee(1L, "UpdatedSimon", "UpdatedGao", "updated@test.com",null);
 
         when(employeeRepository.findById(1L)).thenReturn(Optional.of(sampleEmployee));
         when(employeeRepository.save(any(Employee.class))).thenReturn(updatedEmployee);
@@ -145,7 +145,7 @@ class EmployeeServiceImplTest {
     @Test
     @DisplayName("updateEmployee - should throw exception when not found")
     void updateEmployee_NotFound() {
-        EmployeeDto updatedDto = new EmployeeDto(99L, "Test", "Test", "test@test.com");
+        EmployeeDto updatedDto = new EmployeeDto(99L, "Test", "Test", "test@test.com",null);
         when(employeeRepository.findById(99L)).thenReturn(Optional.empty());
 
         ResourceNotFoundException exception = assertThrows(
