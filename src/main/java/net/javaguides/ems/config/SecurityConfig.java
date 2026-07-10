@@ -30,6 +30,7 @@ public class SecurityConfig {
     @Profile("!auth")
     public SecurityFilterChain openFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> {})
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
         return http.build();
@@ -39,6 +40,7 @@ public class SecurityConfig {
     @Profile("auth")
     public SecurityFilterChain securedFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> {})
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**", "/actuator/**").permitAll()
